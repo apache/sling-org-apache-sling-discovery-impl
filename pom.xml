@@ -43,6 +43,8 @@
         <jackrabbit.version>2.20.16</jackrabbit.version>
         <!-- by default Slow tests are excluded - use -PincludeSlowTests to include them -->
         <sling.excluded.surefire.groups>org.apache.sling.commons.testing.junit.categories.Slow</sling.excluded.surefire.groups>
+        <surefireMemory>-Xmx2048m</surefireMemory>
+        <surefireArgLine>${surefireMemory}</surefireArgLine>
     </properties>
 
     <build>
@@ -52,7 +54,7 @@
                  <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <redirectTestOutputToFile>false</redirectTestOutputToFile>
-                    <argLine>-Xmx2048m</argLine>
+                    <argLine>${surefireArgLine}</argLine>
                     <excludedGroups>${sling.excluded.surefire.groups}</excludedGroups>
                 </configuration>
             </plugin>
@@ -66,6 +68,12 @@
             <id>includeSlowTests</id>
             <properties>
                 <sling.excluded.surefire.groups />
+            </properties>
+        </profile>
+        <profile>
+            <id>jacoco-report</id>
+            <properties>
+                <surefireArgLine>${surefireMemory} ${jacoco.ut.command}</surefireArgLine>
             </properties>
         </profile>
     </profiles>
@@ -89,11 +97,6 @@
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.framework</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.service.event</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -171,7 +174,7 @@
 		<dependency>
 			<groupId>org.apache.sling</groupId>
 			<artifactId>org.apache.sling.api</artifactId>
-			<version>2.7.0</version>
+			<version>2.11.0</version>
             <scope>provided</scope>
 		</dependency>
         <dependency>
@@ -299,6 +302,12 @@
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.testing.sling-mock.junit4</artifactId>
             <version>3.5.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

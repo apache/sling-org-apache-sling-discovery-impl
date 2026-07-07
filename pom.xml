@@ -45,7 +45,8 @@
         <sling.excluded.surefire.groups>org.apache.sling.commons.testing.junit.categories.Slow</sling.excluded.surefire.groups>
         <surefireMemory>-Xmx2048m</surefireMemory>
         <surefireArgLine>${surefireMemory}</surefireArgLine>
-    </properties>
+        <derby.version>10.15.2.0</derby.version>
+	</properties>
 
     <build>
         <plugins>
@@ -76,7 +77,29 @@
                 <surefireArgLine>${surefireMemory} ${jacoco.ut.command}</surefireArgLine>
             </properties>
         </profile>
-    </profiles>
+
+        <!-- Profile for Java 17 environments -->
+        <profile>
+            <id>jdk17-env</id>
+            <activation>
+                <jdk>17</jdk>
+            </activation>
+            <properties>
+                <derby.version>10.16.1.1</derby.version>
+            </properties>
+        </profile>
+
+        <!-- Profile for Java 21 environments -->
+        <profile>
+            <id>jdk21-env</id>
+            <activation>
+                <jdk>[21,)</jdk> <!-- Matches JDK 21 and any newer version -->
+            </activation>
+            <properties>
+                <derby.version>10.17.1.0</derby.version>
+            </properties>
+        </profile>
+	</profiles>
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -257,7 +280,19 @@
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
-            <version>10.14.2.0</version>
+            <version>${derby.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbyshared</artifactId>
+            <version>${derby.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbytools</artifactId>
+            <version>${derby.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
